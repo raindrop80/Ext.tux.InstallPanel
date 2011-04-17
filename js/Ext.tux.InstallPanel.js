@@ -70,8 +70,11 @@ Ext.tux.InstallPanel = Ext.extend(Object, {
 		 * create and returns the panel to display */
 		if((Ext.is.iOS) && (!Ext.is.Standalone)){
 		
+			//Calling the function able to create the animation
+			this.createAnimation();
+		
 			//Calling the function aple to show the Panel
-			this.getPanel(app).show({type: 'pop', duration: 1500});
+			this.getPanel(app).show();
 			
 		}
 
@@ -96,22 +99,23 @@ Ext.tux.InstallPanel = Ext.extend(Object, {
 			   	  '<img src="{icon}" />',
 			   '</div>',
 			   '<div class="x-desc">',
-			      '<b>To Install {name}</b><br/>',
-				  '<span>- Tap <img class="x-btn-small" src="{blankImg}" /> Below</span><br/>',
+			      '<b>To Install {name}:</b><br/>',
+				  '<span>- Tap <img class="x-btn-small" src="{blankImg}" /> button.</span><br/>',
 				  '<span>- Then Select</span><br/>',
 			   '</div>',
 		       '<div class="x-btn-big"></div>',
+			   '<div class="x-tip-{pos} x-anchor x-anchor-{pos}"></div>',
 		    '</div>'
 		);	
 			
 		
-		//Let's defined the install Panel
+		//Definition of the install Panel
 		var p = new Ext.Panel({
 			floating: true,
             hideOnMaskTap: false,
 			width: 300,
 			height: 210,
-			centered: true,
+			cls: 'x-install-panel-anim',
 			styleHtmlContent: true,
 			dockedItems: {
 				xtype: 'toolbar',
@@ -121,9 +125,11 @@ Ext.tux.InstallPanel = Ext.extend(Object, {
 			html: tpl.apply({
 				name: appName,
 				icon: app.icon,
-				blankImg: Ext.BLANK_IMAGE_URL
+				blankImg: Ext.BLANK_IMAGE_URL,
+				pos: (Ext.is.iPhone ? 'bottom' : 'top')
 			})
 		});
+		
 
 		//Returns the created Panel
 		return p;
@@ -140,6 +146,79 @@ Ext.tux.InstallPanel = Ext.extend(Object, {
 		if(appName.length <= 12) return appName;
 		else return appName.substr(0,5) + '....' + appName.substr((appName.length-5),5); 
 		
+	},
+	
+	/**
+	 * @private
+	 * Create the animation that will be used to show the Install Panel.
+	 */
+	createAnimation: function(){
+		
+		//Definition of used variables
+		var style, cls, config;
+		
+		//Creation of the custom stylesheet witch will contain the panel animation
+		style = document.createElement('style');
+	    style.type = 'text/css';
+		style.id = 'Ext.tux.InstallPanel.Animation';
+		
+		//Definition of the Animation keyframes template
+		var animation = new Ext.Template(
+			'@-webkit-keyframes anim-bounce-in {',
+		       '0% {',
+			      'top: {0-t};',
+				  'opacity: 0;',
+			   '}',
+			   '40% {',
+				  'top: {40-t};',
+				  'opacity: 1;',
+			   '}',
+			   '60% {',
+			      'top: {60-t};',
+			   '}',
+			   '100% {',
+				  'top: {100-t};',
+			   '}',
+		    '}'
+		);
+		
+		//Definition of the panel extra cls template
+		var cls = new Ext.Template(
+			'.x-install-panel-anim {',
+			   'top: {100-t};',
+			   'left: {100-l};',
+			   '-webkit-animation: anim-bounce-in 10s 1;',
+			'}'
+		);
+		
+		/* Set the animation and cls params according to the device and orientation
+		 * used by the user who is using the application */ 
+		if(Ext.is.iPhone || Ext.is.iPhone){
+			
+			if(Ext.orientation == 'portrait'){
+				config = { '0-t': '-80%', '40-t': '40%', '60-t': '30%', '100-t': '47%', '100-l': '3.2%' };
+			}else{
+				config = { '0-t': '-80%', '40-t': '10%', '60-t': '2%', '100-t': '18%', '100-l': '19%' };
+			}
+			
+		//The application is running on iPad
+		}else{
+			
+			if(Ext.orientation == 'portrait'){
+				config = { '0-t': '180%', '40-t': '3%', '60-t': '10%', '100-t': '1%', '100-l': '8%' };
+			}else{
+				config = { '0-t': '180%', '40-t': '3%', '60-t': '10%', '100-t': '1.4%', '100-l': '6%' };
+			}
+			
+		}
+		
+		//Let's insert all the created style inside the animation CSS
+		style.innerHTML = animation.apply(config) + cls.apply(config);
+
+		//Finally, the custom stylesheet id added to the page Head
+	    Ext.getHead().appendChild(style);
+		
 	}
+
 
 });
