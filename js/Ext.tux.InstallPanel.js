@@ -65,7 +65,7 @@ Ext.tux.InstallPanel = Ext.extend(Object, {
 	 */
 	init: function(app) {
 		
-		/* if the application is running on iOS device and the application itself 
+		/* If the application is running on iOS device and the application itself 
 		 * has not already added on Home Screen, then let's call the function able to
 		 * create and returns the panel to display */
 		if((Ext.is.iOS) && (!Ext.is.Standalone)){
@@ -97,13 +97,14 @@ Ext.tux.InstallPanel = Ext.extend(Object, {
 			   '</div>',
 			   '<div class="x-desc">',
 			      '<b>To Install {name}</b><br/>',
-				  '<span>- Tap <img class="x-btn-small" src="{blankImg}" /> Below</span><br/>' +
-				  '<span>- Then Select</span><br/>' +
+				  '<span>- Tap <img class="x-btn-small" src="{blankImg}" /> Below</span><br/>',
+				  '<span>- Then Select</span><br/>',
 			   '</div>',
 		       '<div class="x-btn-big"></div>',
 		    '</div>'
-		);
-
+		);	
+			
+		
 		//Let's defined the install Panel
 		var p = new Ext.Panel({
 			floating: true,
@@ -136,12 +137,8 @@ Ext.tux.InstallPanel = Ext.extend(Object, {
 	 */
 	formatAppName: function(appName){
 		
-		if(appName.length <= 12) {
-			return appName
-		}else{
-			var len = appName.length;
-			return appName.substr(0,5) + '....' + appName.substr((len-5),5); 
-		}
+		if(appName.length <= 12) return appName;
+		else return appName.substr(0,5) + '....' + appName.substr((appName.length-5),5); 
 		
 	}
 
