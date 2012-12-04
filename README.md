@@ -1,28 +1,29 @@
-/**
- * @author Andrea Cammarata - http://www.andreacammarata.com
- * @class Ext.tux.InstallPanel
- * <p>This is a simple Ext.Application plugin witch display a help panel with application informations,
- * and explain how to "install" the application on iOS devices.</p> 
- * <p>Sample Usage</p>
- * <pre><code>
- * Ext.regApplication('AndreaCammarata', {
- *
- * 	  //Set the application name
- *	  name: 'AndreaCammarata',
- *
- *	  //Set the application Icon
- *	  icon: 'icon.png',
- *
- *	  //Definition of Ext.tux.InstallPanel Plugin
- *	  plugins: [new Ext.tux.InstallPanel()],
- *
- *	  //Definizione del punto di ingresso dell'applicazione
- *	  launch: function() {
- *
- *		//Create here your Application Viewport
- *
- *	  }
- *
- * });
- * </code></pre> 
- */
+#Ext.tux.InstallPanel
+
+Simple Ext.Application plugin witch display an help panel reporting some application informations,
+and explain how to "install" the application on iOS devices.
+
+##How to Use
+
+All you need to do is to include the plugin directly on the application definition, after setting its the name and icon.
+
+    Ext.regApplication('AndreaCammarata', {
+
+        // Set the application name
+        name: 'AndreaCammarata',
+        
+        // Set the application Icon
+        icon: 'icon.png',
+        
+        // Use the Ext.tux.InstallPanel Plugin
+        plugins: [new Ext.tux.InstallPanel()],
+        
+        launch: function() {
+        
+            // Create here your Application Viewport
+
+    }
+
+##Contributors
+
+    Andrea Cammarata
